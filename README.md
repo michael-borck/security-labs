@@ -25,6 +25,10 @@ Answer keys and facilitator guides are **not** public — they live in a private
 
 ## What's in this repo
 
+- **[`WHY-DOCKER.md`](WHY-DOCKER.md)** — why these labs are containers, where Docker falls short (physical
+  forensics, kernel work, malware), and which approach — VM, bare metal, VPS — to use instead.
+- **[`FURTHER-PRACTICE.md`](FURTHER-PRACTICE.md)** — the wider ecosystem: VulnHub, Hack The Box,
+  PortSwigger, OverTheWire, DFIR datasets and more, mapped to these labs.
 - **[`ARCHITECTURE.md`](ARCHITECTURE.md)** — how a lab is built: how we use Docker + a few scripts to
   simulate a security environment. Read this before contributing.
 - **[`CONTRIBUTING.md`](CONTRIBUTING.md)** — the two contribution paths (add a module / new lab).
