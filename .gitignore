@@ -1,0 +1,11 @@
+# macOS AppleDouble sidecars (this repo often lives on an exFAT/external drive)
+._*
+**/._*
+.DS_Store
+
+# editor / os cruft
+*.swp
+.idea/
+.vscode/
+
+# scaffolding output is created OUTSIDE this repo (../<lab-name>), so nothing to ignore here

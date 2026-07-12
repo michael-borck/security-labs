@@ -1,0 +1,16 @@
+# Build overlay — build a custom base image locally instead of pulling.
+#
+# By default the attacker uses the shared ghcr.io/michael-borck/ethical-base image.
+# When you want your own toolbox, edit base.Dockerfile, switch the attacker image in
+# docker-compose.yml to ghcr.io/__OWNER__/__LAB_SLUG__-base:latest, uncomment below,
+# and build:
+#
+#   docker compose -f docker-compose.yml -f docker-compose.build.yml build
+#
+# On an exFAT/external drive, if a build fails on '._' files:
+#   DOCKER_BUILDKIT=0 docker compose -f docker-compose.yml -f docker-compose.build.yml build
+services:
+  # attacker:
+  #   build:
+  #     context: .
+  #     dockerfile: base.Dockerfile

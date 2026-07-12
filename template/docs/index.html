@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__LAB_TITLE__</title>
+<meta name="description" content="__LAB_TITLE__ — a self-contained, Docker-based security lab.">
+<style>
+  :root{ --bg:#f4f6f8; --surface:#fff; --surface-2:#eaeef2; --line:#dce2e8; --ink:#182029;
+    --muted:#5a6675; --accent:#2b7a9b; --accent-soft:#e2eff4; --radius:12px;
+    --mono:ui-monospace,Menlo,Consolas,monospace; --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif; }
+  @media (prefers-color-scheme:dark){ :root{ --bg:#0f141a; --surface:#161d25; --surface-2:#1e2731;
+    --line:#2a3540; --ink:#e8edf2; --muted:#93a1b0; --accent:#5cb8dc; --accent-soft:#16303c; } }
+  :root[data-theme="light"]{ --bg:#f4f6f8; --surface:#fff; --surface-2:#eaeef2; --line:#dce2e8; --ink:#182029; --muted:#5a6675; --accent:#2b7a9b; --accent-soft:#e2eff4; }
+  :root[data-theme="dark"]{ --bg:#0f141a; --surface:#161d25; --surface-2:#1e2731; --line:#2a3540; --ink:#e8edf2; --muted:#93a1b0; --accent:#5cb8dc; --accent-soft:#16303c; }
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6}
+  .wrap{max-width:900px;margin:0 auto;padding:0 20px}
+  a{color:var(--accent)} h1{font-size:clamp(28px,5vw,42px);letter-spacing:-.02em;margin:0;text-wrap:balance}
+  .bar{display:flex;justify-content:space-between;align-items:center;padding:18px 0;gap:12px;flex-wrap:wrap}
+  .brand{font-weight:700} nav{display:flex;gap:16px;align-items:center}
+  nav a{color:var(--muted);text-decoration:none;font-size:14px} nav a:hover{color:var(--ink)}
+  .theme-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;width:34px;height:34px;cursor:pointer}
+  .hero{padding:46px 0 34px} .eyebrow{font-family:var(--mono);text-transform:uppercase;letter-spacing:.15em;font-size:12px;color:var(--accent);font-weight:600}
+  .lede{font-size:18px;color:var(--muted);max-width:60ch;margin:16px 0 0}
+  .btn{display:inline-block;margin-top:24px;padding:11px 18px;border-radius:9px;background:var(--accent);color:#fff;font-weight:600;text-decoration:none}
+  /* Series strip — keep this identical across the series; mark this lab as .here once it joins. */
+  .series{border-top:1px solid var(--line);margin-top:48px;padding:34px 0 6px}
+  .series h2{font-size:20px;margin:0 0 4px} .series .sub{color:var(--muted);font-size:14px;margin:0 0 18px;max-width:62ch}
+  .series-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:12px}
+  .series-card{display:block;border:1px solid var(--line);border-radius:var(--radius);padding:13px 14px;background:var(--surface);text-decoration:none;color:var(--ink);transition:border-color .15s,transform .15s}
+  .series-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .series-card .role{display:block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:5px}
+  .series-card .nm{display:block;font-weight:650;font-size:14.5px} .series-card .ds{display:block;color:var(--muted);font-size:12.5px;margin-top:3px}
+  footer{padding:26px 0 50px;color:var(--muted);font-size:13.5px;border-top:1px solid var(--line);margin-top:36px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar">
+    <div class="brand">__LAB_TITLE__</div>
+    <nav>
+      <a href="https://michael-borck.github.io/security-labs/" target="_blank" rel="noopener">The series ↗</a>
+      <a href="https://github.com/__OWNER__/__LAB_SLUG__" target="_blank" rel="noopener">GitHub ↗</a>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme">◐</button>
+    </nav>
+  </div>
+
+  <section class="hero">
+    <p class="eyebrow">A hands-on security lab</p>
+    <h1>__LAB_TITLE__</h1>
+    <p class="lede">One-line pitch for your lab goes here — what the learner does and why it's fun. Then
+      replace the rest of this page with your module cards.</p>
+    <a class="btn" href="https://github.com/__OWNER__/__LAB_SLUG__#quick-start">Get started</a>
+  </section>
+
+  <!-- The Series strip. Keep it identical to the other labs. Once this lab is part of the series,
+       add its own card here and mark it with class "series-card here" / "You are here". -->
+  <section class="series" id="series">
+    <h2>Part of the Assume-Breach series</h2>
+    <p class="sub">Four hands-on Docker labs across the security lifecycle — plus the book that frames
+      them and a game that ties it together. Found one? Here's the rest — or browse the whole series on the <a href="https://michael-borck.github.io/security-labs/">series home</a>.</p>
+    <div class="series-grid">
+      <a class="series-card" href="https://michael-borck.github.io/ethical-hacking-docker-labs/"><span class="role">Offensive · break in</span><span class="nm">Ethical Hacking</span><span class="ds">Recon, scan, and exploit your way in</span></a>
+      <a class="series-card" href="https://michael-borck.github.io/cybersecurity-lab-lateral-movement/"><span class="role">Offensive · move through</span><span class="nm">Lateral Movement</span><span class="ds">Pivot deeper once you have a foothold</span></a>
+      <a class="series-card" href="https://michael-borck.github.io/assume-breach-labs/"><span class="role">Defensive</span><span class="nm">Assume Breach</span><span class="ds">Defend assuming the attacker is already in</span></a>
+      <a class="series-card" href="https://michael-borck.github.io/forensics-docker-lab/"><span class="role">Post-breach</span><span class="nm">Digital Forensics</span><span class="ds">Reconstruct the incident from the evidence</span></a>
+      <a class="series-card" href="https://incidentzero.retroverse.studio/" target="_blank" rel="noopener"><span class="role">The game</span><span class="nm">Incident Zero ↗</span><span class="ds">Play the whole lifecycle — print &amp; play</span></a>
+      <a class="series-card" href="https://michael-borck.github.io/assume-breach/" target="_blank" rel="noopener"><span class="role">The book</span><span class="nm">Assume Breach ↗</span><span class="ds">The defender's-mindset thesis behind the labs</span></a>
+    </div>
+  </section>
+
+  <footer>__LAB_TITLE__ · MIT licensed · unit-agnostic teaching material · <a href="https://michael-borck.github.io/security-labs/">the series ↗</a></footer>
+</div>
+<script>
+  (function(){var r=document.documentElement,b=document.getElementById("themeBtn");
+   function cur(){return r.getAttribute("data-theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");}
+   b.addEventListener("click",function(){r.setAttribute("data-theme",cur()==="dark"?"light":"dark");});})();
+</script>
+</body>
+</html>

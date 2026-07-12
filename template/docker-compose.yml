@@ -1,0 +1,32 @@
+# __LAB_TITLE__ — the environment.
+#
+# A container is a host; a network is a segment. This starter has an attacker box
+# and one target on a single network. Grow it: add hosts, add a second network for
+# segmentation, give services static IPs the guide can reference.
+services:
+  attacker:
+    image: ghcr.io/michael-borck/ethical-base:latest  # shared multi-arch toolbox; swap for your own base later
+    container_name: __LAB_SLUG__-attacker
+    hostname: attacker
+    stdin_open: true
+    tty: true
+    cap_add:
+      - NET_ADMIN
+    networks:
+      labnet:
+        ipv4_address: 172.30.0.10
+
+  target:
+    image: nginx:alpine  # multi-arch public example target — replace with your scenario
+    container_name: __LAB_SLUG__-target
+    hostname: target
+    networks:
+      labnet:
+        ipv4_address: 172.30.0.20
+
+networks:
+  labnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24

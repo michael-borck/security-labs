@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Assume-Breach Series — hands-on security labs</title>
+<meta name="description" content="Four self-contained, Docker-based security labs across the attack lifecycle — plus the book that frames them and a game that ties it together.">
+<style>
+  :root{
+    --bg:#f4f6f8; --surface:#ffffff; --surface-2:#eaeef2; --line:#dce2e8;
+    --ink:#182029; --muted:#5a6675; --accent:#2b7a9b; --accent-2:#1e5f79; --accent-soft:#e2eff4;
+    --radius:12px; --shadow:0 1px 2px rgba(20,30,40,.05),0 8px 24px rgba(20,30,40,.06);
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --bg:#0f141a; --surface:#161d25; --surface-2:#1e2731; --line:#2a3540;
+      --ink:#e8edf2; --muted:#93a1b0; --accent:#5cb8dc; --accent-2:#8fd0ea; --accent-soft:#16303c;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);}
+  }
+  :root[data-theme="light"]{ --bg:#f4f6f8; --surface:#ffffff; --surface-2:#eaeef2; --line:#dce2e8;
+    --ink:#182029; --muted:#5a6675; --accent:#2b7a9b; --accent-2:#1e5f79; --accent-soft:#e2eff4;
+    --shadow:0 1px 2px rgba(20,30,40,.05),0 8px 24px rgba(20,30,40,.06);}
+  :root[data-theme="dark"]{ --bg:#0f141a; --surface:#161d25; --surface-2:#1e2731; --line:#2a3540;
+    --ink:#e8edf2; --muted:#93a1b0; --accent:#5cb8dc; --accent-2:#8fd0ea; --accent-soft:#16303c;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px}
+  a{color:var(--accent)}
+  h1,h2,h3{line-height:1.2;margin:0;text-wrap:balance}
+  code,.mono{font-family:var(--mono);font-size:.88em}
+
+  .bar{display:flex;align-items:center;justify-content:space-between;padding:18px 0;gap:16px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;letter-spacing:-.01em}
+  .brand .dot{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+  nav{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  nav a{color:var(--muted);text-decoration:none;font-size:14.5px;font-weight:500}
+  nav a:hover{color:var(--ink)}
+  .theme-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;
+    width:34px;height:34px;font-size:15px;cursor:pointer}
+  .theme-btn:hover{border-color:var(--accent)}
+
+  .hero{padding:46px 0 30px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:var(--mono);text-transform:uppercase;letter-spacing:.16em;font-size:12px;
+    color:var(--accent);font-weight:600}
+  .hero h1{font-size:clamp(30px,5vw,46px);letter-spacing:-.025em;margin:12px 0 0}
+  .hero .lede{font-size:18px;color:var(--muted);max-width:60ch;margin:16px 0 0}
+  .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+  .btn{display:inline-block;padding:11px 18px;border-radius:9px;font-weight:600;font-size:14.5px;
+    text-decoration:none;border:1px solid var(--line);color:var(--ink);background:var(--surface)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{background:var(--accent-2);border-color:var(--accent-2)}
+  .btn:hover{border-color:var(--accent)}
+
+  section.block{padding:40px 0;border-bottom:1px solid var(--line)}
+  .block h2{font-size:24px;letter-spacing:-.01em}
+  .block .sub{color:var(--muted);margin:6px 0 0;max-width:64ch}
+
+  .lifecycle{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:22px 0 4px;
+    font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .lifecycle b{color:var(--accent);font-weight:600}
+  .lifecycle .arw{opacity:.5}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:20px}
+  .card{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;background:var(--surface);text-decoration:none;color:var(--ink);box-shadow:var(--shadow);
+    transition:transform .15s ease,border-color .15s ease}
+  .card:hover{transform:translateY(-3px);border-color:var(--accent)}
+  .card .role{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;
+    color:var(--accent);font-weight:700}
+  .card h3{font-size:17px;margin:8px 0 6px}
+  .card p{margin:0;color:var(--muted);font-size:14px;flex:1}
+  .card .go{margin-top:14px;font-size:13px;font-weight:600;color:var(--accent)}
+  .card.alt{background:linear-gradient(150deg,var(--surface),var(--accent-soft))}
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+  @media(max-width:640px){.two{grid-template-columns:1fr}}
+
+  .steps{margin-top:18px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden}
+  .steps .row{display:flex;gap:14px;padding:15px 18px;border-bottom:1px solid var(--line)}
+  .steps .row:last-child{border-bottom:0}
+  .steps .n{font-family:var(--mono);font-weight:700;color:var(--accent);flex:none}
+  .steps .row div b{display:block}
+  .steps .row div span{color:var(--muted);font-size:14px}
+  .term{margin-top:16px;background:#0e1620;color:#d6e2ec;border-radius:var(--radius);padding:16px 18px;
+    font-family:var(--mono);font-size:13px;line-height:1.8;overflow-x:auto;border:1px solid var(--line)}
+  .term .p{color:#5cb8dc}
+  .term .c{color:#7d8ea0}
+
+  footer{padding:28px 0 60px;color:var(--muted);font-size:13.5px}
+  footer .fl{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="bar">
+    <div class="brand"><span class="dot"></span> Security&nbsp;Labs</div>
+    <nav>
+      <a href="#labs">Labs</a>
+      <a href="ARCHITECTURE.md">Architecture ↗</a>
+      <a href="CONTRIBUTING.md">Contribute ↗</a>
+      <a href="https://github.com/michael-borck/security-labs" target="_blank" rel="noopener">GitHub ↗</a>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle light or dark theme">◐</button>
+    </nav>
+  </div>
+
+  <section class="hero">
+    <p class="eyebrow">The Assume-Breach Series</p>
+    <h1>Learn security by doing — across the whole attack lifecycle.</h1>
+    <p class="lede">Four self-contained, Docker-based labs that run on your laptop and open in a friendly
+      console — no VM, no setup pain. Break in, move laterally, defend, and investigate. Paired with the
+      book that frames the mindset and a game that ties it all together.</p>
+    <div class="cta">
+      <a class="btn primary" href="#labs">Explore the labs</a>
+      <a class="btn" href="ARCHITECTURE.md">How it's built</a>
+    </div>
+  </section>
+
+  <section class="block" id="labs">
+    <h2>Four labs, one lifecycle</h2>
+    <p class="sub">Each runs on its own — start anywhere. Together they walk the arc of a breach, from the
+      attacker's first move to the investigator's final report.</p>
+    <div class="lifecycle">
+      <b>Break in</b><span class="arw">→</span><b>Move through</b><span class="arw">→</span>
+      <b>Assume compromise</b><span class="arw">→</span><b>Investigate</b>
+    </div>
+    <div class="grid">
+      <a class="card" href="https://michael-borck.github.io/ethical-hacking-docker-labs/" target="_blank" rel="noopener">
+        <span class="role">Offensive · break in</span>
+        <h3>Ethical Hacking</h3>
+        <p>Recon, scan, and exploit your way onto a target. Twelve labs from enumeration to a full De-ICE box.</p>
+        <span class="go">Open lab ↗</span>
+      </a>
+      <a class="card" href="https://michael-borck.github.io/cybersecurity-lab-lateral-movement/" target="_blank" rel="noopener">
+        <span class="role">Offensive · move through</span>
+        <h3>Lateral Movement</h3>
+        <p>Land a foothold, then pivot through a segmented network to reach the internal services you can't touch directly.</p>
+        <span class="go">Open lab ↗</span>
+      </a>
+      <a class="card" href="https://michael-borck.github.io/assume-breach-labs/" target="_blank" rel="noopener">
+        <span class="role">Defensive</span>
+        <h3>Assume Breach</h3>
+        <p>Eleven labs in defensive security — scanning, crypto, firewalls, packet capture — assuming the attacker is already in.</p>
+        <span class="go">Open lab ↗</span>
+      </a>
+      <a class="card" href="https://michael-borck.github.io/forensics-docker-lab/" target="_blank" rel="noopener">
+        <span class="role">Post-breach</span>
+        <h3>Digital Forensics</h3>
+        <p>Investigate the Cloudcore breach: recover deleted files, analyse memory, follow the exfiltration, write the report.</p>
+        <span class="go">Open lab ↗</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>The book &amp; the game</h2>
+    <p class="sub">The labs carry the tool mechanics; the book carries the mindset; the game turns the whole
+      lifecycle into cooperative play.</p>
+    <div class="two">
+      <a class="card alt" href="https://michael-borck.github.io/assume-breach/" target="_blank" rel="noopener">
+        <span class="role">The book</span>
+        <h3>Assume Breach</h3>
+        <p>The defender's-mindset thesis behind the labs — tool-agnostic, the "why" to the labs' "how".</p>
+        <span class="go">Read ↗</span>
+      </a>
+      <a class="card alt" href="https://incidentzero.retroverse.studio/" target="_blank" rel="noopener">
+        <span class="role">The game</span>
+        <h3>Incident Zero</h3>
+        <p>A print-and-play cooperative game across the whole security lifecycle, grounded in MITRE ATT&amp;CK and NIST CSF.</p>
+        <span class="go">Play ↗</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Build your own</h2>
+    <p class="sub">Every lab shares one skeleton: an immersive console that hides Docker, a browser landing
+      page, phased guides, and multi-arch images published to GHCR. The scaffold stamps out a new lab in
+      that house style so you can focus on the security scenario, not the plumbing.</p>
+    <div class="term" aria-hidden="true">
+      <span class="c"># from the security-labs repo</span><br>
+      <span class="p">$</span> ./create-lab.sh my-new-lab "My New Lab"<br>
+      <span class="c">  ✓ scaffolded ../my-new-lab in the house style</span><br>
+      <span class="c">  next: edit docker-compose.yml + LAB-GUIDE.md, then `make run`</span>
+    </div>
+    <div class="steps">
+      <div class="row"><span class="n">1</span><div><b>Read the architecture</b><span>How we simulate a security environment with Docker + a few scripts — the shared anatomy of every lab.</span></div></div>
+      <div class="row"><span class="n">2</span><div><b>Scaffold a lab</b><span><code>create-lab.sh</code> copies the template and wires in the console, landing page, GHCR workflow and Series strip.</span></div></div>
+      <div class="row"><span class="n">3</span><div><b>Contribute back</b><span>Add a module to an existing lab, or open a new one — the contributing guide covers both paths.</span></div></div>
+    </div>
+    <div class="cta">
+      <a class="btn primary" href="ARCHITECTURE.md">Read the architecture</a>
+      <a class="btn" href="CONTRIBUTING.md">Contributing guide</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fl">
+      <div>The Assume-Breach Series · MIT licensed · unit-agnostic teaching material.</div>
+      <div><a href="https://github.com/michael-borck/security-labs" target="_blank" rel="noopener">github.com/michael-borck/security-labs</a></div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  (function(){
+    var root=document.documentElement, btn=document.getElementById("themeBtn");
+    function cur(){return root.getAttribute("data-theme") || (window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");}
+    btn.addEventListener("click",function(){
+      var next=cur()==="dark"?"light":"dark";
+      root.setAttribute("data-theme",next);
+    });
+  })();
+</script>
+</body>
+</html>

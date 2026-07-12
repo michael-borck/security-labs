@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# __LAB_TITLE__ — immersive console. Hides Docker behind plain verbs.
+set -u
+cd "$(dirname "$0")/.." || exit 1
+
+C_OK=$'\033[0;32m'; C_P=$'\033[0;36m'; C_DIM=$'\033[0;90m'; NC=$'\033[0m'
+
+need_docker() {
+  command -v docker >/dev/null 2>&1 || { echo "Docker isn't installed. Install Docker Desktop and re-run."; exit 1; }
+  docker info >/dev/null 2>&1 || { echo "Docker is installed but not running. Start Docker Desktop and re-run."; exit 1; }
+}
+
+bring_up() {
+  echo "${C_DIM}Powering on the lab…${NC}"
+  ( docker compose pull || docker compose build ) >/tmp/__LAB_SLUG__-up.log 2>&1
+  docker compose up -d >>/tmp/__LAB_SLUG__-up.log 2>&1 \
+    && echo "${C_OK}The lab is up.${NC}" \
+    || { echo "Something went wrong bringing the lab up:"; tail -n 15 /tmp/__LAB_SLUG__-up.log; exit 1; }
+}
+
+open_url() {
+  local url="$1"
+  if command -v open >/dev/null 2>&1; then open "$url"
+  elif command -v xdg-open >/dev/null 2>&1; then xdg-open "$url"
+  elif command -v explorer.exe >/dev/null 2>&1; then explorer.exe "$url"
+  else echo "Open this in your browser: $url"; fi
+}
+
+need_docker
+printf "\n  ${C_P}__LAB_TITLE__${NC}\n  ${C_DIM}An isolated lab in Docker. Type ${NC}help${C_DIM} for commands.${NC}\n\n"
+read -r -p "  Your name (for the session): " ANALYST
+bring_up
+printf "\n  Welcome%s. Type ${C_P}connect${NC} to drop into the attacker box.\n\n" "${ANALYST:+, $ANALYST}"
+
+while true; do
+  read -r -p "lab> " cmd rest || break
+  case "$cmd" in
+    connect)  docker compose exec attacker bash 2>/dev/null || docker compose exec attacker sh ;;
+    open)     open_url "http://localhost:8080" ;;
+    guide)    ${PAGER:-less} LAB-GUIDE.md 2>/dev/null || cat LAB-GUIDE.md ;;
+    status)   docker compose ps ;;
+    stop)     docker compose stop; echo "Stopped. Run start again to resume." ;;
+    map)      python3 tools/gen-netmap.py 2>/dev/null && open_url "docs/diagrams/network.svg" ;;
+    help|"")  cat <<EOF
+  connect   shell into the attacker box
+  open      open the web target in your browser
+  guide     read the lab guide
+  status    show what's running
+  map       (re)draw the network map
+  stop      stop the lab
+  quit      leave the console (lab keeps running; 'stop' to halt it)
+EOF
+      ;;
+    quit|exit) echo "  Bye. The lab is still running — type stop first to halt it."; break ;;
+    *) echo "  Unknown command: $cmd (type help)";;
+  esac
+done
