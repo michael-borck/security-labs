@@ -16,9 +16,10 @@ repos.
 | Assume compromise | [assume-breach-labs](https://github.com/michael-borck/assume-breach-labs) | Defensive |
 | Investigate | [forensics-docker-lab](https://github.com/michael-borck/forensics-docker-lab) | Post-breach |
 
-Plus the companion **[*Assume Breach* book](https://michael-borck.github.io/assume-breach/)** (the mindset)
-and the **[*Incident Zero* game](https://incidentzero.retroverse.studio/)** (the whole lifecycle as
-cooperative play).
+Plus two companion books — **[*Assume Breach*](https://michael-borck.github.io/assume-breach/)** (the
+defender's mindset) and **[*Substantiate, Don't Assume*](https://michael-borck.github.io/substantiate-dont-assume/)**
+(security audit & controls) — and the **[*Incident Zero* game](https://incidentzero.retroverse.studio/)**
+(the whole lifecycle as cooperative play).
 
 Answer keys and facilitator guides are **not** public — they live in a private companion repo
 (`security-labs-staff`). Learner walkthroughs stay in the public labs.
