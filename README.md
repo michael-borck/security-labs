@@ -27,6 +27,8 @@ Answer keys and facilitator guides are **not** public — they live in a private
 
 ## What's in this repo
 
+- **[`LEARNING-WITH-AI.md`](LEARNING-WITH-AI.md)** — how to do these labs *with* an AI assistant and
+  still end up with the skill: the kata loop, and the rules for using AI as a thinking partner.
 - **[`WHY-DOCKER.md`](WHY-DOCKER.md)** — why these labs are containers, where Docker falls short (physical
   forensics, kernel work, malware), and which approach — VM, bare metal, VPS — to use instead.
 - **[`FURTHER-PRACTICE.md`](FURTHER-PRACTICE.md)** — the wider ecosystem: VulnHub, Hack The Box,

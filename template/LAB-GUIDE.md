@@ -2,6 +2,11 @@
 
 > Replace this stub with your scenario. Keep the house voice: immersive, second-person,
 > concept-first. No "submit a report", no marks, no fill-in-the-blank answer boxes.
+> Keep the "Using an AI assistant?" callout below — it's standard across the series.
+
+> **Using an AI assistant?** Make it a thinking partner, not an autopilot — and never run a command you
+> can't explain. The series guide **[Learning with AI](https://github.com/michael-borck/security-labs/blob/main/LEARNING-WITH-AI.md)**
+> shows how, including how to repeat each lab until you don't need the assistant at all.
 
 ## Scenario
 
