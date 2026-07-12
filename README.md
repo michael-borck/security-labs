@@ -15,6 +15,7 @@ repos.
 | Move through | [cybersecurity-lab-lateral-movement](https://github.com/michael-borck/cybersecurity-lab-lateral-movement) | Offensive — post-exploitation |
 | Assume compromise | [assume-breach-labs](https://github.com/michael-borck/assume-breach-labs) | Defensive |
 | Investigate | [forensics-docker-lab](https://github.com/michael-borck/forensics-docker-lab) | Post-breach |
+| Govern / audit | [security-audit-lab](https://github.com/michael-borck/security-audit-lab) | Audit & controls (not Docker — a web + interview simulation) |
 
 Plus two companion books — **[*Assume Breach*](https://michael-borck.github.io/assume-breach/)** (the
 defender's mindset) and **[*Substantiate, Don't Assume*](https://michael-borck.github.io/substantiate-dont-assume/)**
