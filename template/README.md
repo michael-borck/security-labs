@@ -12,7 +12,8 @@ A self-contained, Docker-based security lab. Part of the
    ./start.sh          # macOS/Linux (or double-click start.command on macOS)
    ```
 
-   On Windows, run `start.bat` from Git Bash or WSL2.
+   On Windows, install [Git for Windows](https://git-scm.com/download/win) once, then just
+   double-click `start.bat` (no terminal needed — it finds Git Bash or WSL by itself).
 
 That launches an immersive console — the machines power on and you drive the lab with plain commands
 (`connect`, `open`, `guide`). No `docker` typing required. Power users can use `make run` /
