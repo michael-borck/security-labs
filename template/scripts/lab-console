@@ -3,7 +3,13 @@
 set -u
 cd "$(dirname "$0")/.." || exit 1
 
-C_OK=$'\033[0;32m'; C_P=$'\033[0;36m'; C_DIM=$'\033[0;90m'; NC=$'\033[0m'
+# $'...' gives real escape characters (survives heredocs and plain echo,
+# unlike a bare '\033' string). No colours when stdout isn't a terminal.
+if [ -t 1 ]; then
+  C_OK=$'\033[0;32m'; C_P=$'\033[0;36m'; C_DIM=$'\033[0;90m'; NC=$'\033[0m'
+else
+  C_OK=''; C_P=''; C_DIM=''; NC=''
+fi
 
 need_docker() {
   command -v docker >/dev/null 2>&1 || { echo "Docker isn't installed. Install Docker Desktop and re-run."; exit 1; }
