@@ -1,7 +1,7 @@
 # Security Labs — the Assume-Breach Series
 
 The umbrella for a family of self-contained, Docker-based security labs. Each lab runs on a laptop,
-hides Docker behind an immersive console, and teaches one part of the attack lifecycle. This repo is
+hides Docker and logs you straight into a real interactive shell, and teaches one part of the attack lifecycle. This repo is
 the **front door, the shared architecture, and the scaffold** — the labs themselves live in their own
 repos.
 

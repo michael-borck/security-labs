@@ -9,7 +9,7 @@ security environment. Read **[`ARCHITECTURE.md`](ARCHITECTURE.md)** first; it's 
 - Docker Desktop (or Docker Engine) able to run `docker compose`.
 - Comfort with a shell, `docker`/`docker compose`, and basic Dockerfiles.
 - The mental model in `ARCHITECTURE.md`: containers = hosts, networks = segments, planted files =
-  scenario, the console hides Docker.
+  scenario, the console hides Docker and drops the learner into a real interactive shell.
 
 ## Two ways to contribute
 
@@ -44,7 +44,8 @@ guide, GHCR workflow, Makefile). Then:
 
 - **Unit-agnostic.** No course codes, week numbers, "worksheet/assignment/semester", or institution
   names — in content *or* filenames.
-- **Immersive-first, honest.** The console and landing page describe what the lab actually does.
+- **Real shell, honest.** Hide Docker and log the student into a real shell running the genuine tools;
+  the console and landing page describe what the lab actually does.
 - **Multi-arch.** Anything you publish must build for `amd64` and `arm64`. Prefer multi-arch third-party
   images; pin `platform:` only for unavoidable `amd64`-only ones, and note it.
 - **Pull, don't build** by default; keep the `docker-compose.build.yml` overlay working for offline use.

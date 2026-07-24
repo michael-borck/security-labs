@@ -29,8 +29,8 @@ drop to raw `docker` commands. The console serves the first without blocking the
 
 1. **Self-contained and offline-first.** No external web dependencies a lab can't survive losing.
    Targets, evidence, and tools live inside the compose network or are fetched by an explicit script.
-2. **Immersive by default, Docker hidden.** The learner runs `./start.sh`, "logs in", and uses verbs
-   like `connect` / `open` / `guide`. They never need to know it's Docker.
+2. **Real shell, Docker hidden.** The learner runs `./start.sh`, "logs in", and lands in a real
+   interactive shell running the genuine tools. They never need to know it's Docker.
 3. **Pull, don't build.** Images are published multi-arch to GHCR, so the default path is a fast pull.
    Building locally is an offline/dev fallback, not the norm.
 4. **Multi-arch or bust.** Every image we own is built for `amd64` **and** `arm64`, so it runs natively
@@ -45,7 +45,7 @@ drop to raw `docker` commands. The console serves the first without blocking the
 ```
 <lab>/
 ├── start.sh / start.command / start.bat   # learner entry points → scripts/lab-console
-├── scripts/lab-console                     # the immersive REPL that hides Docker
+├── scripts/lab-console                     # hides Docker, logs the student into a real shell
 ├── docker-compose.yml                      # the environment: hosts (services) + networks (segments)
 ├── Makefile                                # run / stop / status / build-base — the power-user surface
 ├── LAB-GUIDE.md                            # the phased walkthrough (house voice)
@@ -63,20 +63,24 @@ Not every lab has every file (a CLI-only lab has no VNC service; a single-scenar
 `LAB-GUIDE.md`, a multi-module lab has several). But the shape is consistent enough that the scaffold
 can stamp it out.
 
-## 4. The immersive console
+## 4. Shell mode: the real shell
 
 `start.sh` (and the macOS `.command` / Windows `.bat` wrappers) do one thing: launch
 `scripts/lab-console`. The console:
 
 - checks Docker is installed and running, with a friendly message if not;
-- "logs the learner in" (asks a name, prints a themed banner);
+- "logs the learner in" (asks a name);
 - brings the environment up **behind a spinner** — `pull` the images, fall back to `build` only if the
   pull fails, then `up -d`;
-- drops the learner into a `lab>` prompt with verbs: `connect` (shell into the attacker box), `open`
-  (a browser target), `guide` (print the lab guide), `status`, `stop`.
+- logs the learner **straight into a real interactive shell** on the lab's `SHELL_HOST` container,
+  where the genuine tools (`nmap`, `iptables`, `gpg`, `john`, …) are already installed. There is no
+  `lab>` prompt and no invented verbs — the student runs the actual commands themselves (and can get
+  AI help on them).
 
-The console is the product surface. Everything it does is achievable with raw `docker` too — it just
-removes the need.
+Inside the shell, a themed welcome banner, a host-aware `labhelp`, and a `netmap` command orient the
+learner; multi-machine labs use real `ssh` to hop between hosts. The shell is the product surface. The
+Docker plumbing underneath is still hidden — the student never types `docker` — but everything they
+drive is the real thing.
 
 ## 5. Images and the GHCR pipeline
 
