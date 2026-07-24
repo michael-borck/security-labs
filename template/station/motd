@@ -1,0 +1,18 @@
+
+  +===================================================================+
+  |         A S S U M E   B R E A C H   —   S E C U R I T Y   L A B    |
+  +===================================================================+
+
+        Security Workstation  ·  __LAB_TITLE__
+
+  You are logged in on the 'attacker' workstation — your base on the lab
+  network (172.30.0.0/24).  One target is already running.
+
+  MISSION  (rewrite this line in station/motd for your scenario)
+    Work the lab from here using the real, installed tools.
+
+    >  type  labhelp   for the mission and the commands you'll need
+    >  type  netmap    to (re)draw the network diagram
+    >  everything here is real — try things, break things, and ask an
+       AI assistant to explain any command you don't recognise
+

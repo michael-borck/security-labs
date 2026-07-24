@@ -5,7 +5,14 @@
 # segmentation, give services static IPs the guide can reference.
 services:
   attacker:
-    image: ghcr.io/michael-borck/ethical-base:latest  # shared multi-arch toolbox; swap for your own base later
+    # The workstation the student lands in — built from base.Dockerfile so it has
+    # the welcome banner, `labhelp`/`netmap`, and a themed prompt out of the box.
+    # `pull` (from GHCR, once CI has published it) is tried first; a fresh lab has
+    # nothing to pull, so it builds locally the first time. Add tools in base.Dockerfile.
+    build:
+      context: .
+      dockerfile: base.Dockerfile
+    image: ghcr.io/__OWNER__/__LAB_SLUG__-base:latest
     container_name: __LAB_SLUG__-attacker
     hostname: attacker
     stdin_open: true

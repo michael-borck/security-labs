@@ -1,0 +1,21 @@
+#!/bin/sh
+# `netmap` — redraw the lab's network diagram at any time.
+#
+# This is the in-workstation ASCII view. The host-side tool tools/gen-netmap.py
+# renders the same topology as an SVG for docs/diagrams/ (read live from
+# docker-compose.yml). When you add hosts or a second network, update BOTH the
+# compose file and this ASCII map so the picture the student sees stays honest.
+cat <<'EOF'
+
+  LAB NETWORK   ·   172.30.0.0/24
+
+     +------------------------+          +------------------------+
+     |  attacker  .0.10       |  labnet  |  target    .0.20       |
+     |  (you are here)        |----------|  nginx  :80            |
+     +------------------------+          +------------------------+
+
+     Both hosts share one bridge network. Grow the lab by adding hosts
+     and a second network segment in docker-compose.yml, then redraw
+     this map to match.
+
+EOF

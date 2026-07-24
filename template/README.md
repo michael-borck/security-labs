@@ -15,18 +15,20 @@ A self-contained, Docker-based security lab. Part of the
    On Windows, install [Git for Windows](https://git-scm.com/download/win) once, then just
    double-click `start.bat` (no terminal needed — it finds Git Bash or WSL by itself).
 
-That launches an immersive console — the machines power on and you drive the lab with plain commands
-(`connect`, `open`, `guide`). No `docker` typing required. Power users can use `make run` /
+That powers the lab up in Docker and logs you straight into a **real workstation shell** — a genuine
+command line on the `attacker` box, running the actual tools. Type `labhelp` for the mission and
+`netmap` for the network map. No `docker` typing required. Power users can use `make run` /
 `docker compose` directly.
 
 ## What's here
 
 - `docker-compose.yml` — the environment (an attacker box + a target on one network, to start).
-- `scripts/lab-console` — the immersive console.
+- `base.Dockerfile` + `station/` — the attacker workstation image: real tools, welcome banner,
+  `labhelp` / `netmap`, themed prompt.
+- `scripts/lab-console` — the launcher (brings the lab up, then logs you into the workstation shell).
 - `LAB-GUIDE.md` — the walkthrough.
 - `docs/index.html` — the landing page (GitHub Pages).
-- `base.Dockerfile` + `.github/workflows/build.yml` — optional custom toolbox image, published
-  multi-arch to GHCR.
+- `.github/workflows/build.yml` — publishes the workstation image (`base.Dockerfile`) multi-arch to GHCR.
 
 ## Build this out
 

@@ -1,0 +1,17 @@
+# --- Assume Breach Labs: security-workstation feel (INTERACTIVE shells only) --
+# Installed as /etc/profile.d/00-lab-workstation.sh (for login shells) and
+# appended to /etc/bash.bashrc (for the `docker compose exec ... bash` home shell).
+# Some shells source these even for one-off `sh -lc 'cmd'` or `ssh host cmd`, so we
+# guard on $- : only a real interactive session gets the banner + which-host line +
+# themed prompt. A non-interactive command (scripts, CI, `docker exec ... sh -lc`)
+# stays clean — no banner spam.
+case $- in
+  *i*)
+    if [ -z "$LAB_MOTD_SHOWN" ]; then
+        [ -f /etc/motd-lab ] && cat /etc/motd-lab
+        printf "  You are logged in on:  %s\n\n" "$(hostname)"
+        export LAB_MOTD_SHOWN=1
+    fi
+    PS1='\[\033[1;32m\]\u@\h\[\033[0m\]:\[\033[1;34m\]\w\[\033[0m\]\$ '
+    ;;
+esac

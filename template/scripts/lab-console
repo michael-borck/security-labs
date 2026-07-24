@@ -1,10 +1,28 @@
 #!/usr/bin/env bash
-# __LAB_TITLE__ — immersive console. Hides Docker behind plain verbs.
+# __LAB_TITLE__ — launcher. Brings the lab up in Docker, then logs the student
+# straight into a REAL interactive shell on the workstation (shell-mode). No lab>
+# REPL and no invented verbs: the student works the lab with the genuine installed
+# tools, exactly as they would on a real machine.
 set -u
 cd "$(dirname "$0")/.." || exit 1
 
-# $'...' gives real escape characters (survives heredocs and plain echo,
-# unlike a bare '\033' string). No colours when stdout isn't a terminal.
+# --- Which box does the student land on? -------------------------------------
+# SHELL_HOST is the docker-compose SERVICE the launcher drops the student into.
+# The starter has one workstation ('attacker'); point this at a different service
+# to make another box the entry point (e.g. 'analyst', 'firewall', 'station').
+#
+# MULTI-HOST LABS (optional — this template stays single-box by default):
+# keep ONE entry box here and give the student real `ssh` to the others from
+# inside it. Bake a shared root keypair + host keys into the image so
+# `ssh <other-host>` just works on the isolated lab network — see assume-breach
+# module-07 (node/Dockerfile: `ssh-keygen -A`, a baked id_ed25519 copied to
+# authorized_keys, and a client config with StrictHostKeyChecking no). A disposable
+# baked lab key is fine on an isolated teaching net. A comment + the keypair is all
+# it takes; you don't need a bigger launcher.
+SHELL_HOST="${SHELL_HOST:-attacker}"
+
+# $'...' gives real escape characters (survives heredocs and plain echo, unlike a
+# bare '\033' string). No colours when stdout isn't a terminal.
 if [ -t 1 ]; then
   C_OK=$'\033[0;32m'; C_P=$'\033[0;36m'; C_DIM=$'\033[0;90m'; NC=$'\033[0m'
 else
@@ -25,7 +43,9 @@ bring_up() {
 }
 
 open_url() {
-  local url="$1"
+  # Browser convenience for web-target labs: `./start.sh open [url]` opens the
+  # target in a browser. Never required — the default path is the real shell.
+  local url="${1:-http://localhost:8080}"
   if command -v open >/dev/null 2>&1; then open "$url"
   elif command -v xdg-open >/dev/null 2>&1; then xdg-open "$url"
   elif command -v explorer.exe >/dev/null 2>&1; then explorer.exe "$url"
@@ -33,31 +53,21 @@ open_url() {
 }
 
 need_docker
-printf "\n  ${C_P}__LAB_TITLE__${NC}\n  ${C_DIM}An isolated lab in Docker. Type ${NC}help${C_DIM} for commands.${NC}\n\n"
-read -r -p "  Your name (for the session): " ANALYST
-bring_up
-printf "\n  Welcome%s. Type ${C_P}connect${NC} to drop into the attacker box.\n\n" "${ANALYST:+, $ANALYST}"
 
-while true; do
-  read -r -p "lab> " cmd rest || break
-  case "$cmd" in
-    connect)  docker compose exec attacker bash 2>/dev/null || docker compose exec attacker sh ;;
-    open)     open_url "http://localhost:8080" ;;
-    guide)    ${PAGER:-less} LAB-GUIDE.md 2>/dev/null || cat LAB-GUIDE.md ;;
-    status)   docker compose ps ;;
-    stop)     docker compose stop; echo "Stopped. Run start again to resume." ;;
-    map)      python3 tools/gen-netmap.py 2>/dev/null && open_url "docs/diagrams/network.svg" ;;
-    help|"")  cat <<EOF
-  connect   shell into the attacker box
-  open      open the web target in your browser
-  guide     read the lab guide
-  status    show what's running
-  map       (re)draw the network map
-  stop      stop the lab
-  quit      leave the console (lab keeps running; 'stop' to halt it)
-EOF
-      ;;
-    quit|exit) echo "  Bye. The lab is still running — type stop first to halt it."; break ;;
-    *) echo "  Unknown command: $cmd (type help)";;
-  esac
-done
+# Optional: `./start.sh open [url]` just opens the web target and exits.
+if [ "${1:-}" = "open" ]; then bring_up; open_url "${2:-}"; exit 0; fi
+
+printf "\n  ${C_P}__LAB_TITLE__${NC}\n  ${C_DIM}An isolated lab in Docker. Logging you into the workstation…${NC}\n\n"
+bring_up
+
+# Hand the student a REAL shell on the workstation. The image's welcome banner,
+# `labhelp`, `netmap` and themed prompt take over from here (see base.Dockerfile).
+# `exec` replaces this launcher, so the student's terminal *is* the workstation
+# shell; when they `exit`, control returns to their host terminal and the lab keeps
+# running (`make stop` to halt it, `make down` to remove it).
+printf "  ${C_DIM}Type ${NC}labhelp${C_DIM} for the mission, ${NC}netmap${C_DIM} for the network, ${NC}exit${C_DIM} to leave.${NC}\n\n"
+if docker compose exec "$SHELL_HOST" sh -c 'command -v bash >/dev/null 2>&1' >/dev/null 2>&1; then
+  exec docker compose exec "$SHELL_HOST" bash
+else
+  exec docker compose exec "$SHELL_HOST" sh
+fi

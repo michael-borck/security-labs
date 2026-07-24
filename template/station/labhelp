@@ -1,0 +1,29 @@
+#!/bin/sh
+# __LAB_TITLE__ — quick reference, shown by the `labhelp` command.
+# Rewrite the MISSION and the example commands below for your scenario.
+cat <<'EOF'
+
+  __LAB_TITLE__            (you are on the 'attacker' workstation)
+  -------------------------------------------------------------------
+
+  MISSION
+    Replace this with your scenario's objective. The starter ships an
+    attacker box and one target (an nginx service) on the lab network,
+    so you have something real to point the tools at from the first run.
+
+  THE COMMANDS YOU'LL NEED   (real tools — run them, read the output)
+
+    nmap -sn 172.30.0.0/24            discover live hosts on the segment
+    nmap -sV target                   fingerprint the target's services
+    curl -i http://target/            talk to the target's web service
+    ping -c3 target                   basic reachability
+
+  TIP
+    Everything here is a real shell on a real machine. Explore with the
+    tools you know; ask an AI assistant to explain anything unfamiliar —
+    but never run a command you can't explain.
+
+  Type  netmap  for the network diagram.
+  Full guide:  LAB-GUIDE.md (in the lab folder).   Type  exit  to leave.
+
+EOF

@@ -19,8 +19,10 @@ trying to achieve? Make it concrete enough to care about.
 ./start.sh        # or: make run
 ```
 
-The console brings the environment up and drops you at a `lab>` prompt. Type `connect` to enter the
-attacker box.
+This brings the environment up and logs you **straight into a real shell** on the `attacker`
+workstation — no menu, no `lab>` prompt. You're at a genuine command line with the lab's tools
+already installed. Type `labhelp` for the mission, `netmap` for the network map. When you're done,
+`exit` leaves the shell (the lab keeps running; `make stop` to halt it).
 
 ## Phase 1 — <name the first objective>
 
