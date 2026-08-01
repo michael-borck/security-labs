@@ -29,15 +29,28 @@ else
   C_OK=''; C_P=''; C_DIM=''; NC=''
 fi
 
+# Container engine. Docker by default; CONTAINER_ENGINE=podman runs the lab under
+# Podman instead. docker-compose.yml is an engine-neutral spec, so this is the only
+# thing that changes — there is one lab, not a Docker copy and a Podman copy.
+# Rootless Podman matters on shared machines: unlike Docker, it does not make
+# everyone who can start containers root on the host.
+ENGINE="${CONTAINER_ENGINE:-docker}"
+if [ "$ENGINE" = "podman" ] && ! podman compose version >/dev/null 2>&1 \
+   && command -v podman-compose >/dev/null 2>&1; then
+  COMPOSE="podman-compose"
+else
+  COMPOSE="$ENGINE compose"
+fi
+
 need_docker() {
-  command -v docker >/dev/null 2>&1 || { echo "Docker isn't installed. Install Docker Desktop and re-run."; exit 1; }
-  docker info >/dev/null 2>&1 || { echo "Docker is installed but not running. Start Docker Desktop and re-run."; exit 1; }
+  command -v "$ENGINE" >/dev/null 2>&1 || { echo "$ENGINE isn't installed. Install it and re-run."; exit 1; }
+  "$ENGINE" info >/dev/null 2>&1 || { echo "$ENGINE is installed but not running. Start it and re-run."; exit 1; }
 }
 
 bring_up() {
   echo "${C_DIM}Powering on the lab…${NC}"
-  ( docker compose pull || docker compose build ) >/tmp/__LAB_SLUG__-up.log 2>&1
-  docker compose up -d >>/tmp/__LAB_SLUG__-up.log 2>&1 \
+  ( $COMPOSE pull || $COMPOSE build ) >/tmp/__LAB_SLUG__-up.log 2>&1
+  $COMPOSE up -d >>/tmp/__LAB_SLUG__-up.log 2>&1 \
     && echo "${C_OK}The lab is up.${NC}" \
     || { echo "Something went wrong bringing the lab up:"; tail -n 15 /tmp/__LAB_SLUG__-up.log; exit 1; }
 }
@@ -66,8 +79,8 @@ bring_up
 # shell; when they `exit`, control returns to their host terminal and the lab keeps
 # running (`make stop` to halt it, `make down` to remove it).
 printf "  ${C_DIM}Type ${NC}labhelp${C_DIM} for the mission, ${NC}netmap${C_DIM} for the network, ${NC}exit${C_DIM} to leave.${NC}\n\n"
-if docker compose exec "$SHELL_HOST" sh -c 'command -v bash >/dev/null 2>&1' >/dev/null 2>&1; then
-  exec docker compose exec "$SHELL_HOST" bash
+if $COMPOSE exec "$SHELL_HOST" sh -c 'command -v bash >/dev/null 2>&1' >/dev/null 2>&1; then
+  exec $COMPOSE exec "$SHELL_HOST" bash
 else
-  exec docker compose exec "$SHELL_HOST" sh
+  exec $COMPOSE exec "$SHELL_HOST" sh
 fi

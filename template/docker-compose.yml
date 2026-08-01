@@ -24,7 +24,10 @@ services:
         ipv4_address: 172.30.0.10
 
   target:
-    image: nginx:alpine  # multi-arch public example target — replace with your scenario
+    # Pinned, not :alpine. An unpinned public image can change under a lab between
+    # one cohort and the next — a guide written against one version quietly stops
+    # matching. Pin whatever you replace this with too.
+    image: nginx:1.31.3-alpine  # multi-arch public example target — replace with your scenario
     container_name: __LAB_SLUG__-target
     hostname: target
     networks:
@@ -34,6 +37,22 @@ services:
 networks:
   labnet:
     driver: bridge
+    # `internal: true` removes the NAT gateway: containers still talk to each
+    # other, but have no route to the internet OR to the network the host sits
+    # on. Keep it. The attacker box here holds NET_ADMIN, and without this a
+    # student can scan the real network they are sitting on — from a machine
+    # that is not theirs, with traffic that appears to come from it.
+    #
+    # TWO CASES WHERE THIS BREAKS THINGS — both verified, neither documented:
+    #  1. It SILENTLY DISCARDS published ports. If you add a `ports:` entry for a
+    #     browser-based lab, the container comes up with no host mapping and no
+    #     warning. Such a service must go on a separate, non-internal network and
+    #     be bound to 127.0.0.1 instead (see README).
+    #  2. It breaks routing BETWEEN two lab networks. If you add a second segment
+    #     and route between them (a firewall or VPN lab), Docker's
+    #     `! -s <subnet> -o <bridge> -j DROP` rule drops the crossing traffic —
+    #     the lab starts cleanly and is quietly useless. Drop `internal` on those.
+    internal: true
     ipam:
       config:
         - subnet: 172.30.0.0/24

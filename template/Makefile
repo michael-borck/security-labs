@@ -1,4 +1,7 @@
-COMPOSE = docker compose
+# Container engine — CONTAINER_ENGINE=podman switches the whole lab to Podman.
+ENGINE  ?= $(CONTAINER_ENGINE)
+ENGINE  := $(if $(ENGINE),$(ENGINE),docker)
+COMPOSE = $(ENGINE) compose
 
 .PHONY: help run stop status down netmaps
 help:
@@ -11,7 +14,7 @@ help:
 run:
 	$(COMPOSE) pull || $(COMPOSE) build
 	$(COMPOSE) up -d
-	@echo "Lab up. Enter the attacker box:  docker compose exec attacker bash"
+	@echo "Lab up. Enter the attacker box:  $(COMPOSE) exec attacker bash"
 
 stop:
 	$(COMPOSE) stop

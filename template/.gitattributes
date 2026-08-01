@@ -1,0 +1,6 @@
+# Batch files must keep CRLF (cmd.exe mishandles LF-only goto labels)
+*.bat text eol=crlf
+# Shell scripts must keep LF (bash rejects CRLF)
+*.sh text eol=lf
+start.command text eol=lf
+scripts/lab-console text eol=lf

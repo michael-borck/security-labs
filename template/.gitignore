@@ -5,3 +5,6 @@
 *.swp
 .idea/
 .vscode/
+
+# Local env overrides — may hold lab GUI passwords, never commit
+.env

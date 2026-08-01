@@ -41,6 +41,57 @@ This is a scaffold. Next steps:
 See the series [architecture guide](https://github.com/michael-borck/security-labs/blob/main/ARCHITECTURE.md)
 for how each piece fits together.
 
+Fill in `SECURITY.md` as you go — it is what stops a reviewer re-reporting your
+deliberate choices as findings.
+
+## Adding a service the student opens in a browser
+
+The scaffold publishes no ports, and `labnet` is `internal: true` so nothing can
+reach the internet or the network your machine sits on. If your lab needs a web UI,
+there are two traps — both verified, neither documented by Docker.
+
+**1. Never publish a port with the short syntax.** `"8080:80"` binds `0.0.0.0`, so
+the service is reachable by every device on the network you happen to be on. Always
+name the interface:
+
+```yaml
+    ports:
+      - "${LAB_BIND:-127.0.0.1}:8080:80"
+```
+
+**2. `internal: true` silently discards published ports.** A service with `ports:`
+on an internal network starts fine, shows no host mapping, warns about nothing, and
+is simply unreachable. So a browser-facing service needs its own non-internal
+network — keep everything else on `labnet`:
+
+```yaml
+services:
+  webapp:
+    image: your/app:1.2.3          # pin it
+    ports:
+      - "${LAB_BIND:-127.0.0.1}:8080:80"
+    networks: [webnet]             # NOT labnet
+
+networks:
+  webnet:                          # no `internal:` — publishing needs the gateway
+    driver: bridge
+```
+
+**If it is a browser desktop** (LinuxServer `webtop`, `wireshark`, noVNC images),
+it serves an unauthenticated desktop **with a terminal in it** unless you set
+credentials. Always set them:
+
+```yaml
+    environment:
+      - CUSTOM_USER=${LAB_GUI_USER:-analyst}
+      - PASSWORD=${LAB_GUI_PASSWORD:-labpass}
+```
+
+**A third trap, if you add a second segment:** `internal: true` also breaks routing
+*between* two lab networks — Docker drops traffic whose source is not in the target
+bridge's subnet. A firewall, VPN or pivot lab must leave those networks
+non-internal, or it will start cleanly and be quietly useless.
+
 ## Licence
 
 MIT.
