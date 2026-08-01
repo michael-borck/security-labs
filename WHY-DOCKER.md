@@ -4,6 +4,36 @@ These labs run in Docker. That's a deliberate choice with real trade-offs, not a
 containers are always best. This page is the honest version: what Docker buys us, where it genuinely
 falls short, and which other approach to use when it does.
 
+## What we moved away from, and why
+
+These labs replaced a virtual machine image running an **end-of-life 32-bit Windows desktop OS**. That
+approach worked for years, and the argument for keeping it was reasonable: the material teaches
+*concepts* — permissions, enumeration, packet analysis — and those don't depend on the OS underneath.
+People had real work invested in it.
+
+It stopped being defensible for reasons that had nothing to do with the teaching:
+
+- **An unpatched guest OS is a liability that patching can't fix.** No security updates since 2014, with
+  publicly known wormable remote-code-execution bugs that will never be closed. A lab VM is usually
+  bridged or NATed onto a real network at some point.
+- **No modern exploit mitigations**, and a TLS stack too old to reach much of today's web — so ordinary
+  tasks inside it were quietly degrading.
+- **Uncertain provenance.** Decade-old images get passed hand to hand; establishing what's actually in
+  one is not easy. That's a supply-chain question, not a pedantic one.
+- **Architecture lock.** A 32-bit x86 image won't run natively on the ARM laptops a growing share of
+  students own — emulation is slow where it works at all.
+- **Drift.** A VM image is a binary blob that accumulates undocumented changes. A `Dockerfile` is a
+  readable, reviewable, rebuildable definition.
+
+The deciding argument was the awkward one: a course that teaches people to patch, reduce attack
+surface, and retire unsupported software is in a poor position asking students to run a knowingly
+unpatched host. Students notice.
+
+> **One myth worth retiring: "VMs avoid the virtualisation setup hassle."** They don't — both routes need
+> hardware virtualisation. VirtualBox and friends need VT-x/AMD-V enabled in firmware; Docker Desktop
+> needs WSL 2 or Hyper-V on Windows and the hypervisor framework on macOS. The fiddly
+> enable-virtualisation-in-the-BIOS step is common to both, so it isn't a reason to prefer either.
+
 ## Why we chose Docker
 
 - **Runs on any laptop.** Containers share the host kernel, so they start in seconds and use megabytes,
@@ -45,6 +75,29 @@ limits below. When a lab needs one of these, the honest answer is "use a differe
   than a real VM desktop, and heavy graphical tools suffer.
 - **"Feels like a real machine."** A container host is minimal and ephemeral (often no systemd, few
   background services). Great for isolating one concept; less convincing as a full enterprise box.
+
+### Who can run containers is who is root
+
+Worth stating plainly, because it's the trade-off people most often miss — and because it's a
+worked example of the trust boundaries these labs are about.
+
+A container runtime creates processes as root and mounts host paths on request. So whoever is
+allowed to use it can read and write the host filesystem with root privileges. **Permission to run
+containers is therefore equivalent to administrative access on that machine**, whatever the account's
+nominal rights say. On Linux that's the `docker` group; on Windows, `docker-users`; on macOS it's
+softer, bounded by Docker Desktop's file sharing and system file protection. Docker documents this
+itself — it's intended behaviour, not a vulnerability.
+
+Two consequences worth carrying:
+
+- **On your own laptop this is invisible**, because you're already the administrator. It only becomes
+  real on a machine you share with someone else, which is exactly where people meet it unprepared.
+- **`--privileged`, mounting the Docker socket, or bind-mounting host paths widen it further.** Treat
+  a request to do any of those in someone else's environment as a request for root.
+
+The exception is **rootless** Podman or rootless Docker, which don't carry root equivalence and are
+the right choice for a shared host with multiple users. If you need containers on a machine where
+users shouldn't be administrators, that's the option to reach for.
 
 ## The alternatives, and when each wins
 
