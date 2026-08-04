@@ -75,6 +75,10 @@
   .card p{margin:0;color:var(--muted);font-size:14px;flex:1}
   .card .go{margin-top:14px;font-size:13px;font-weight:600;color:var(--accent)}
   .card.alt{background:linear-gradient(150deg,var(--surface),var(--accent-soft))}
+  .card.locked{background:var(--surface-2);border-style:dashed;box-shadow:none;cursor:default}
+  .card.locked:hover{transform:none;border-color:var(--line)}
+  .card.locked .role,.card.locked h3{color:var(--muted)}
+  .card.locked .go{color:var(--muted);font-weight:500}
 
   .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
   @media(max-width:640px){.two{grid-template-columns:1fr}}
@@ -166,6 +170,31 @@
     </div>
   </section>
 
+  <section class="block" id="foundations">
+    <h2>Foundations — the network underneath</h2>
+    <p class="sub">The lifecycle labs assume a working network: routes that hold, DNS that resolves,
+      firewalls with rules already in them. These two build that layer, so "the scan never reached the
+      host" becomes something you can reason about instead of a mystery.</p>
+    <div class="two">
+      <a class="card" href="https://michael-borck.github.io/enterprise-network-lab/" target="_blank" rel="noopener">
+        <span class="role">Docker · four-site WAN</span>
+        <h3>Enterprise Network Lab</h3>
+        <p>A miniature enterprise across Perth, London, LA and a Pilbara mine site on a latency-shaped
+          satellite link. Real FRR/OSPF routing, real dnsmasq, real nftables — plus a Suricata sensor on
+          the HQ router and traffic that follows the sun around the network.</p>
+        <span class="go">Open lab ↗</span>
+      </a>
+      <a class="card" href="https://michael-borck.github.io/netsim/" target="_blank" rel="noopener">
+        <span class="role">Browser · no install</span>
+        <h3>NetSim</h3>
+        <p>Drag out a topology and watch ARP and ICMP animate across the wire. Devices take real Linux
+          syntax — <code>ip addr</code>, <code>ip route</code>, <code>ping</code>, nftables — not an
+          invented teaching CLI. Five labs with auto-checked objectives.</p>
+        <span class="go">Try it ↗</span>
+      </a>
+    </div>
+  </section>
+
   <section class="block">
     <h2>The books, the game &amp; the toys</h2>
     <p class="sub">The labs carry the tool mechanics; two companion books carry the mindset and the audit
@@ -238,6 +267,24 @@
     <div class="cta">
       <a class="btn primary" href="https://github.com/michael-borck/security-labs/blob/main/ARCHITECTURE.md">Read the architecture</a>
       <a class="btn" href="https://github.com/michael-borck/security-labs/blob/main/CONTRIBUTING.md">Contributing guide</a>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>For instructors</h2>
+    <p class="sub">Learner walkthroughs stay in the public labs. Answer keys, marking rubrics and
+      facilitator guides deliberately do not — they live in a private companion repo, so a student
+      who finds this page can't find the solutions.</p>
+    <div class="grid">
+      <div class="card locked">
+        <span class="role">Private · invite only</span>
+        <h3>security-labs-staff 🔒</h3>
+        <p>Per-module facilitator guides, assignment briefs and marking rubrics, the full lateral-movement
+          pivot solution, the audit lab's planted-gap map and answer key, and the IT brief on running these
+          labs on managed machines. No runnable lab lives here — it's assessor material only.</p>
+        <span class="go">Teaching this material? Request access by
+          <a href="https://github.com/michael-borck/security-labs/issues" target="_blank" rel="noopener">opening an issue ↗</a></span>
+      </div>
     </div>
   </section>
 

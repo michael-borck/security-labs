@@ -17,7 +17,20 @@ repos.
 | Investigate | [forensics-docker-lab](https://github.com/michael-borck/forensics-docker-lab) | Post-breach |
 | Govern / audit | [security-audit-lab](https://github.com/michael-borck/security-audit-lab) | Audit & controls (not Docker — a web + interview simulation) |
 
-Plus two companion books — **[*Assume Breach*](https://michael-borck.github.io/assume-breach/)** (the
+## Foundations — the network underneath
+
+The lifecycle labs assume a working network: routes that hold, DNS that resolves, firewalls with rules
+already in them. These two build that layer, so *"the scan never reached the host"* becomes something
+you can reason about instead of a mystery.
+
+| | Repo | Stance |
+|---|-----|--------|
+| Run the network | [enterprise-network-lab](https://github.com/michael-borck/enterprise-network-lab) | Docker — four-site WAN with real FRR/OSPF, dnsmasq, nftables and a Suricata sensor |
+| Reason about the network | [netsim](https://github.com/michael-borck/netsim) | Browser — a topology simulator that takes real Linux syntax (not Docker, no install) |
+
+## The books, the game & the toys
+
+Two companion books — **[*Assume Breach*](https://michael-borck.github.io/assume-breach/)** (the
 defender's mindset) and **[*Substantiate, Don't Assume*](https://michael-borck.github.io/substantiate-dont-assume/)**
 (security audit & controls) — and the **[*Incident Zero* game](https://incidentzero.retroverse.studio/)**
 (the whole lifecycle as cooperative play).
@@ -27,8 +40,16 @@ each built to break one specific misconception (how long a password *really* las
 threshold catches everything). No Docker, no install, no network: they're the ten minutes before a
 lab, not the lab.
 
-Answer keys and facilitator guides are **not** public — they live in a private companion repo
-(`security-labs-staff`). Learner walkthroughs stay in the public labs.
+## For instructors
+
+Learner walkthroughs stay in the public labs. Answer keys, marking rubrics and facilitator guides
+deliberately do not — they live in **`security-labs-staff`**, a private, invite-only companion repo, so
+a student who finds this page can't find the solutions. It holds per-module facilitator guides,
+assignment briefs and rubrics, the full lateral-movement pivot solution, the audit lab's planted-gap
+map and answer key, and the IT brief on running these labs on managed machines. No runnable lab lives
+there — it's assessor material only.
+
+Teaching this material? Request access by [opening an issue](https://github.com/michael-borck/security-labs/issues).
 
 ## What's in this repo
 
