@@ -5,7 +5,7 @@ hides Docker and logs you straight into a real interactive shell, and teaches on
 the **front door, the shared architecture, and the scaffold** — the labs themselves live in their own
 repos.
 
-**→ [The series landing page](https://michael-borck.github.io/security-labs/)**
+**→ [The series landing page](https://security.borck.education/)**
 
 ## The series
 
@@ -35,7 +35,7 @@ defender's mindset) and **[*Substantiate, Don't Assume*](https://michael-borck.g
 (security audit & controls) — and the **[*Incident Zero* game](https://incidentzero.retroverse.studio/)**
 (the whole lifecycle as cooperative play).
 
-And **[security-toys](https://michael-borck.github.io/security-toys/)** — single-page browser toys,
+And **[security-toys](https://securitytoys.borck.education/)** — single-page browser toys,
 each built to break one specific misconception (how long a password *really* lasts; why no alert
 threshold catches everything). No Docker, no install, no network: they're the ten minutes before a
 lab, not the lab.

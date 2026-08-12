@@ -1,7 +1,7 @@
 # __LAB_TITLE__
 
 A self-contained, Docker-based security lab. Part of the
-[Assume-Breach series](https://michael-borck.github.io/security-labs/).
+[Assume-Breach series](https://security.borck.education/).
 
 ## Quick start
 
