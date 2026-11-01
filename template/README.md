@@ -5,11 +5,12 @@ A self-contained, Docker-based security lab. Part of the
 
 ## Quick start
 
-1. Install Docker Desktop.
+1. Install Docker Desktop (or Podman).
 2. Run it:
 
    ```bash
-   ./start.sh          # macOS/Linux (or double-click start.command on macOS)
+   ./start.sh                       # Docker (default)
+   CONTAINER_ENGINE=podman ./start.sh   # Podman
    ```
 
    On Windows, install [Git for Windows](https://git-scm.com/download/win) once, then just

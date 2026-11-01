@@ -1,11 +1,22 @@
 # Security Labs — the Assume-Breach Series
 
-The umbrella for a family of self-contained, Docker-based security labs. Each lab runs on a laptop,
-hides Docker and logs you straight into a real interactive shell, and teaches one part of the attack lifecycle. This repo is
-the **front door, the shared architecture, and the scaffold** — the labs themselves live in their own
-repos.
+The umbrella for a family of self-contained, container-based security labs. Each lab runs on a
+laptop, hides the container engine and logs you straight into a real interactive shell, and teaches
+one part of the attack lifecycle. This repo is the **front door, the shared architecture, and the
+scaffold** — the labs themselves live in their own repos.
 
 **→ [The series landing page](https://security.borck.education/)**
+
+## Docker or Podman
+
+The labs are ordinary Docker Compose projects, and every launcher and Makefile also accepts Podman.
+Install Docker Desktop/Engine or Podman, make sure a Compose front-end is available (`docker
+compose`, `podman compose`, or `podman-compose`), then run `./start.sh` — it detects the engine.
+Set `CONTAINER_ENGINE=podman` to force Podman.
+
+Labs that need `SYS_ADMIN`, `privileged`, `/dev/fuse` or host-level routing —
+`enterprise-network-lab`, the forensics lab, and ethical-hacking Week 10 — need **rootful** Podman.
+On macOS/Windows: `podman machine set --rootful`, then restart the machine.
 
 ## The series
 
@@ -15,7 +26,7 @@ repos.
 | Move through | [cybersecurity-lab-lateral-movement](https://github.com/michael-borck/cybersecurity-lab-lateral-movement) | Offensive — post-exploitation |
 | Assume compromise | [assume-breach-labs](https://github.com/michael-borck/assume-breach-labs) | Defensive |
 | Investigate | [forensics-docker-lab](https://github.com/michael-borck/forensics-docker-lab) | Post-breach |
-| Govern / audit | [security-audit-lab](https://github.com/michael-borck/security-audit-lab) | Audit & controls (not Docker — a web + interview simulation) |
+| Govern / audit | [security-audit-lab](https://github.com/michael-borck/security-audit-lab) | Audit & controls (no container engine — a web + interview simulation) |
 
 ## Foundations — the network underneath
 
@@ -25,8 +36,8 @@ you can reason about instead of a mystery.
 
 | | Repo | Stance |
 |---|-----|--------|
-| Run the network | [enterprise-network-lab](https://github.com/michael-borck/enterprise-network-lab) | Docker — four-site WAN with real FRR/OSPF, dnsmasq, nftables and a Suricata sensor |
-| Reason about the network | [netsim](https://github.com/michael-borck/netsim) | Browser — a topology simulator that takes real Linux syntax (not Docker, no install) |
+| Run the network | [enterprise-network-lab](https://github.com/michael-borck/enterprise-network-lab) | Docker or Podman — four-site WAN with real FRR/OSPF, dnsmasq, nftables and a Suricata sensor |
+| Reason about the network | [netsim](https://github.com/michael-borck/netsim) | Browser — a topology simulator that takes real Linux syntax (no container engine, no install) |
 
 ## The books, the game & the toys
 
@@ -37,8 +48,8 @@ defender's mindset) and **[*Substantiate, Don't Assume*](https://michael-borck.g
 
 And **[security-toys](https://securitytoys.borck.education/)** — single-page browser toys,
 each built to break one specific misconception (how long a password *really* lasts; why no alert
-threshold catches everything). No Docker, no install, no network: they're the ten minutes before a
-lab, not the lab.
+threshold catches everything). No containers, no install, no network: they're the ten minutes
+before a lab, not the lab.
 
 ## For instructors
 
@@ -59,8 +70,8 @@ Teaching this material? Request access by [opening an issue](https://github.com/
   forensics, kernel work, malware), and which approach — VM, bare metal, VPS — to use instead.
 - **[`FURTHER-PRACTICE.md`](FURTHER-PRACTICE.md)** — the wider ecosystem: VulnHub, Hack The Box,
   PortSwigger, OverTheWire, DFIR datasets and more, mapped to these labs.
-- **[`ARCHITECTURE.md`](ARCHITECTURE.md)** — how a lab is built: how we use Docker + a few scripts to
-  simulate a security environment. Read this before contributing.
+- **[`ARCHITECTURE.md`](ARCHITECTURE.md)** — how a lab is built: how we use Docker/Podman + a few
+  scripts to simulate a security environment. Read this before contributing.
 - **[`CONTRIBUTING.md`](CONTRIBUTING.md)** — the two contribution paths (add a module / new lab).
 - **[`create-lab.sh`](create-lab.sh)** + **[`template/`](template/)** — scaffold a new lab in the house style.
 - **[`docs/`](docs/)** — the series landing page (GitHub Pages).

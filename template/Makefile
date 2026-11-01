@@ -1,7 +1,11 @@
 # Container engine — CONTAINER_ENGINE=podman switches the whole lab to Podman.
 ENGINE  ?= $(CONTAINER_ENGINE)
 ENGINE  := $(if $(ENGINE),$(ENGINE),docker)
-COMPOSE = $(ENGINE) compose
+ifeq ($(ENGINE),podman)
+COMPOSE := $(shell podman compose version >/dev/null 2>&1 && echo "podman compose" || echo "podman-compose")
+else
+COMPOSE := docker compose
+endif
 
 .PHONY: help run stop status down netmaps
 help:
